@@ -112,7 +112,6 @@
             const errorMessage = document.getElementById('errorMessage');
 
             if (input === correctPasscode) {
-                sessionStorage.setItem('passcodeValidated', 'true');
                 document.getElementById('passcodeOverlay').style.display = 'none';
                 document.body.classList.remove('hidden-content');
             } else {
@@ -129,12 +128,8 @@
         });
 
         window.addEventListener('load', function() {
-            if (sessionStorage.getItem('passcodeValidated') === 'true') {
-                document.getElementById('passcodeOverlay').style.display = 'none';
-            } else {
-                document.body.classList.add('hidden-content');
-                document.getElementById('passcodeInput').focus();
-            }
+            document.body.classList.add('hidden-content');
+            document.getElementById('passcodeInput').focus();
         });
     </script>
 </body>
