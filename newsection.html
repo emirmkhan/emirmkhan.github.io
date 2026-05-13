@@ -5,8 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Section</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .passcode-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .passcode-modal {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+        }
+
+        .passcode-modal h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .passcode-modal input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .passcode-modal button {
+            width: 100%;
+            padding: 12px;
+            background-color: #fff;
+            color: #667eea;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .passcode-modal button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        body.hidden-content {
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
+    <div class="passcode-overlay" id="passcodeOverlay">
+        <div class="passcode-modal">
+            <h2>Enter Passcode</h2>
+            <input type="password" id="passcodeInput" placeholder="Enter passcode">
+            <button onclick="validatePasscode()">Submit</button>
+            <div class="error-message" id="errorMessage">Incorrect passcode. Try again.</div>
+        </div>
+    </div>
+
     <header>
         <h1>New Section</h1>
         <nav>
@@ -27,5 +103,39 @@
     <footer>
         <p>&copy; 2026 All Rights Reserved</p>
     </footer>
+
+    <script>
+        const correctPasscode = '386492';
+
+        function validatePasscode() {
+            const input = document.getElementById('passcodeInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (input === correctPasscode) {
+                sessionStorage.setItem('passcodeValidated', 'true');
+                document.getElementById('passcodeOverlay').style.display = 'none';
+                document.body.classList.remove('hidden-content');
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('passcodeInput').value = '';
+                document.getElementById('passcodeInput').focus();
+            }
+        }
+
+        document.getElementById('passcodeInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                validatePasscode();
+            }
+        });
+
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('passcodeValidated') === 'true') {
+                document.getElementById('passcodeOverlay').style.display = 'none';
+            } else {
+                document.body.classList.add('hidden-content');
+                document.getElementById('passcodeInput').focus();
+            }
+        });
+    </script>
 </body>
 </html>
